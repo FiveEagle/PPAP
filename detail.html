@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout.html}">
+<head>
+    <title>Bootstrap 5 Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+
+        // JavaScript를 사용하여 드롭다운을 동적으로 업데이트
+        $(document).ready(function() {
+            // 각 지역에 해당하는 시군구 목록 정의
+            var cityOptions = {
+                region1: ['부천시', '수원시', '의정부시','안양시', '성남시', '광명시',
+                    '평택시', '동두천시', '안산시', '고양시', '과천시', '구리시','남양주시',
+                    '오산시','시흥시','군포시','의왕시','하남시','용인시','파주시',
+                    '이천시','안성시','김포시','화성시','광주시','양주시','포천시',
+                    '여주시','연천군','가평군','양평군'],
+                region2: ['종로구', '증구', '용산구', '용산구', '용산구', '용산구',
+                    '성동구', '광진구', '동대문구', '중랑구', '성북구', '강북구',
+                    '도봉구', '노원구', '은평구', '서대문구', '마포구', '양천구',
+                    '강서구', '구로구', '금천구', '영등포구', '동작구', '관악구',
+                    '서초구', '강남구', '송파구', '강동구'],
+                region3: ['중구', '동구', '미추홀구', '연수구', '남동구', '부평구',
+                    '계양구', '서구', '강화군', '옹진군'],
+                region4: ['춘천시', '원주시', '강릉시', '동해시', '태백시', '속초시',
+                    '삼척시', '홍천군', '횡성군', '영월군','평창군', '정선군', '철원군',
+                    '화천군', '양구군', '인제군', '고성군', '양양군'],
+                region5: ['천안시', '공주시', '보령시', '아산시', '서산시', '논산시', '계룡시',
+                    '당진시', '금산군', '부여군', '서천군', '청양군', '홍성군', '예산군', '태안군'],
+                region6: ['청주시', '충주시', '제천시', '보은군', '옥천군', '영동군', '증평군', '진천군','괴산군', '음성군', '단양군']
+
+
+            };
+
+            // 지역 선택 드롭다운이 변경될 때 시군구 선택 드롭다운 업데이트
+            $('#regionSelect').change(function() {
+                var selectedRegion = $(this).val();
+                var citySelect = $('#citySelect');
+                citySelect.empty();
+
+                // 선택된 지역에 해당하는 시군구 목록을 추가
+                $.each(cityOptions[selectedRegion], function(index, value) {
+                    citySelect.append('<option>' + value + '</option>');
+                });
+            });
+
+            // 초기화를 위해 한 번 호출
+            $('#regionSelect').trigger('change');
+        });
+
+    </script>
+
+</head>
+<body>
+<div layout:fragment="content">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Logo</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav">
+                    <li sec:authorize="anonymous" class="nav-item">
+                        <a class="nav-link" href="/login">로그인</a>
+                    </li>
+                    <li sec:authorize="anonymous" class="nav-item">
+                        <a class="nav-link" href="/signup">회원가입</a>
+                    </li>
+                    <li sec:authorize="anonymous" class="nav-item">
+                        <a class="nav-link" href="/signup">오프라인 매장 </a>
+                    </li>
+                    <li sec:authorize="hasRole('ADMIN')" class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">관리자</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/member/info">회원정보</a></li>
+                            <li><a class="dropdown-item" href="/member/list">회원목록</a></li>
+                            <li><a class="dropdown-item" href="/board/list">게시물목록</a></li>
+                            <li><a class="dropdown-item" href="/board/write">게시글작성</a></li>
+                            <li><a class="dropdown-item" href="/logout">로그아웃</a></li>
+                        </ul>
+                    </li>
+                    <li sec:authorize="hasRole('USER')" class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">회원</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/member/info">회원정보</a></li>
+                            <li><a class="dropdown-item" href="/board/list">게시물목록</a></li>
+                            <li><a class="dropdown-item" href="/board/write">게시글작성</a></li>
+                            <li><a class="dropdown-item" href="/logout">로그아웃</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="row mt-3">
+        <div class="col-lg-4"></div>
+            <div class="col-lg-4">
+                <div class="card mb-3">
+                    <div class="card-body p-3">
+                        <div class="container mt-3">
+                            <h2>지역 및 시군구 선택</h2>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th><label for="regionSelect">지역 선택</label></th>
+                                    <th> <label for="citySelect">시군구 선택</label>
+                                    </th>
+                                    <!-- 시군구 옵션은 JavaScript로 동적으로 업데이트됨 -->
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <select class="form-control" id="regionSelect" style="width: 150px">
+                                            <option value="region1">경기도</option>
+                                            <option value="region2">서울특별시</option>
+                                            <option value="region3">인천광역시</option>
+                                            <option value="region4">강원도</option>
+                                            <option value="region5">충남</option>
+                                            <option value="region6">충북</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="citySelect">
+                                        <!-- 시군구 옵션은 JavaScript로 동적으로 업데이트됨 -->
+                                        </select>
+                                    </td>
+                                    <td><button type="button" class="btn btn-primary">완료</button></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="col-lg-4"></div>
+<div class="row">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8">
+        <table class="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <div class="card" style="width:250px">
+                    <img class="card-img-top" src="https://www.w3schools.com/bootstrap5/img_avatar1.png" alt="Card image">
+                    <div class="card-body">
+                        <h5 class="card-title">휴먼스</h5>
+                        <p class="card-text">
+                            경기도 부천시 경인로 128
+                            0507-1416-5737
+                        </p>
+                        <a href="https://smartstore.naver.com/jun-bike" class="btn btn-primary">보러가기</a>
+                    </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="card" style="width:250px" >
+                    <img class="card-img-top" src="https://www.w3schools.com/bootstrap5/img_avatar1.png" alt="Card image" style="width:100%">
+                    <div class="card-body">
+                        <h5 class="card-title">칠성바이크</h5>
+                        <p class="card-text">
+                            경기도 부천시 여월동 78-1
+                            032-684-0506
+                        </p>
+                        <a href="http://csbike.co.kr/" class="btn btn-primary">보러가기</a>
+                    </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="card" style="width:250px" >
+                    <img class="card-img-top" src="https://www.w3schools.com/bootstrap5/img_avatar1.png" alt="Card image" style="width:100%">
+                    <div class="card-body">
+                        <h5 class="card-title">옥자네집</h5>
+                        <p class="card-text">
+                            경기 부천시 양지로166번길 7
+                            0507-1309-6388
+                        </p>
+                        <a href="http://www.okjabike.com" class="btn btn-primary">보러가기</a>
+                    </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="card" style="width:250px" >
+                    <img class="card-img-top" src="https://www.w3schools.com/bootstrap5/img_avatar1.png" alt="Card image" style="width:100%">
+                    <div class="card-body">
+                        <h5 class="card-title">낙타스</h5>
+                        <p class="card-text">
+                            경기도 부천시 조마루로85번길 7-44
+                            010-8971-2811
+                        </p>
+                        <a href="https://www.naktas.co.kr/main/index.php" class="btn btn-primary">보러가기</a>
+                    </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="card" style="width:250px" >
+                        <img class="card-img-top" src="https://www.w3schools.com/bootstrap5/img_avatar1.png" alt="Card image" style="width:100%">
+                        <div class="card-body">
+                            <h5 class="card-title">낙타스</h5>
+                            <p class="card-text">
+                                경기도 부천시 조마루로85번길 7-44
+                                010-8971-2811
+                            </p>
+                            <a href="https://www.naktas.co.kr/main/index.php" class="btn btn-primary">보러가기</a>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="card" style="width:250px" >
+                        <img class="card-img-top" src="https://www.w3schools.com/bootstrap5/img_avatar1.png" alt="Card image" style="width:100%">
+                        <div class="card-body">
+                            <h5 class="card-title">낙타스</h5>
+                            <p class="card-text">
+                                경기도 부천시 조마루로85번길 7-44
+                                010-8971-2811
+                            </p>
+                            <a href="https://www.naktas.co.kr/main/index.php" class="btn btn-primary">보러가기</a>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="card" style="width:250px" >
+                        <img class="card-img-top" src="https://www.w3schools.com/bootstrap5/img_avatar1.png" alt="Card image" style="width:100%">
+                        <div class="card-body">
+                            <h5 class="card-title">낙타스</h5>
+                            <p class="card-text">
+                                경기도 부천시 조마루로85번길 7-44
+                                010-8971-2811
+                            </p>
+                            <a href="https://www.naktas.co.kr/main/index.php" class="btn btn-primary">보러가기</a>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="card" style="width:250px" >
+                        <img class="card-img-top" src="https://www.w3schools.com/bootstrap5/img_avatar1.png" alt="Card image" style="width:100%">
+                        <div class="card-body">
+                            <h5 class="card-title">낙타스</h5>
+                            <p class="card-text">
+                                경기도 부천시 조마루로85번길 7-44
+                                010-8971-2811
+                            </p>
+                            <a href="https://www.naktas.co.kr/main/index.php" class="btn btn-primary">보러가기</a>
+                        </div>
+                    </div>
+                </td>
+
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-2"></div>
+</div>
+</div>
+</body>
+</html>
+
+
